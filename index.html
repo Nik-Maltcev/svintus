@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Oink! — Wild Pig Card Game</title>
+<meta name="description" content="Oink! is a fast, chaotic pig-themed shedding card game. Match colors and symbols, slap the OINK button, and don't touch anything when someone plays Shhh!">
+<link rel="stylesheet" href="css/style.css">
+<!-- CrazyGames SDK: safely absent in local dev (see js/sdk.js) -->
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ MENU ============ -->
+  <section id="menu" class="screen">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="menu-inner">
+      <div id="logo">
+        <div id="logo-pig"></div>
+        <h1>OINK!</h1>
+        <p class="tagline">The wild pig card game</p>
+      </div>
+      <div class="setup">
+        <div class="setup-row">
+          <span class="setup-label">Opponents</span>
+          <div id="opp-picker"></div>
+        </div>
+        <button id="btn-play" class="btn primary big">Play</button>
+      </div>
+      <div class="menu-links">
+        <button id="btn-how" class="btn ghost">How to play</button>
+        <button id="btn-sound" class="btn ghost">Sound: On</button>
+      </div>
+      <p id="stats-line" class="stats"></p>
+    </div>
+    <div class="mud-footer"></div>
+  </section>
+
+  <!-- ============ GAME ============ -->
+  <section id="game" class="screen" hidden>
+    <div id="topbar">
+      <button id="btn-quit" class="btn ghost small">&#9776; Menu</button>
+      <div id="topbar-title">OINK!</div>
+      <div class="topbar-right">
+        <button id="btn-sound2" class="btn ghost small">Sound</button>
+        <button id="btn-help" class="btn ghost small">?</button>
+      </div>
+    </div>
+
+    <div id="table">
+      <div id="seats"></div>
+
+      <div id="center">
+        <div id="deck-wrap">
+          <div id="deck" class="pile">
+            <div class="card back"><div class="back-snout"></div><div class="back-word">OINK!</div></div>
+          </div>
+          <span id="deck-count" class="pile-count"></span>
+        </div>
+        <div id="discard-wrap">
+          <div id="direction">
+            <svg viewBox="0 0 60 60">
+              <path d="M14 22 A18 18 0 0 1 46 22" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+              <path d="M40 14 L47 23 L37 25" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M46 38 A18 18 0 0 1 14 38" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+              <path d="M20 46 L13 37 L23 35" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div id="discard" class="pile"></div>
+          <div id="color-chip" class="chip"></div>
+        </div>
+      </div>
+
+      <div id="hand-area">
+        <button id="btn-oink" hidden>OINK!</button>
+        <div id="hand"></div>
+        <div id="you-chip">
+          <div class="avatar" id="you-avatar"></div>
+          <span>You</span>
+          <span class="count">0</span>
+        </div>
+      </div>
+
+      <div id="turn-banner"></div>
+    </div>
+
+    <div id="toasts"></div>
+  </section>
+
+  <!-- overlays live outside #game so they also work from the menu -->
+  <div id="overlay-root" hidden></div>
+
+</div>
+<script src="js/cards.js"></script>
+<script src="js/game.js"></script>
+<script src="js/bots.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/sdk.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
