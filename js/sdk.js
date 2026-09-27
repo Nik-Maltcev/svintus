@@ -9,14 +9,19 @@
 
   var sdk = null;
   var available = false;
+  var initializing = null;
 
   function init() {
+    if (available) return Promise.resolve();
+    if (initializing) return initializing;
     try {
       if (global.CrazyGames && global.CrazyGames.SDK) {
         var maybe = global.CrazyGames.SDK.init();
         if (maybe && typeof maybe.then === 'function') {
-          return maybe.then(function () { sdk = global.CrazyGames.SDK; available = true; })
-                       .catch(function (e) { console.info('[oink] SDK init failed', e); });
+          initializing = maybe.then(function () { sdk = global.CrazyGames.SDK; available = true; })
+            .catch(function (e) { console.info('[oink] SDK init failed', e); })
+            .finally(function () { initializing = null; });
+          return initializing;
         }
         sdk = global.CrazyGames.SDK;
         available = true;

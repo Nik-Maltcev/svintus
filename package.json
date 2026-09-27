@@ -1,0 +1,11 @@
+{
+  "name": "oink-card-game",
+  "private": true,
+  "scripts": {
+    "test": "node tests/game-rules.js && node tests/layout.js",
+    "test:layout": "node tests/layout.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

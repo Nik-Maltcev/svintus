@@ -11,7 +11,7 @@
     n = n || 300;
     var out = [];
     var t0 = performance.now();
-    var totalTurns = 0, maxTurns = 0, hushCount = 0, oinkFails = 0, swaps = 0, reshuffles = 0;
+    var totalTurns = 0, maxTurns = 0, hushCount = 0, slapCount = 0, oinkFails = 0, transfers = 0, reshuffles = 0;
     var wins = [0, 0, 0, 0];
     var failures = 0;
 
@@ -27,7 +27,8 @@
         onEvent: function (e) {
           if (e.t === 'hush') hushCount++;
           if (e.t === 'oinkFail') oinkFails++;
-          if (e.t === 'swap') swaps++;
+          if (e.t === 'slap') slapCount++;
+          if (e.t === 'attack' && e.count > 3) transfers++;
           if (e.t === 'reshuffle') reshuffles++;
         }
       });
@@ -39,6 +40,7 @@
         var idx = game.turn;
         var a = OINK.bots.decide(game, idx);
         try {
+          if (a.type === 'play' && game.players[idx].hand.length === 2) game.callOink(idx);
           if (a.type === 'play') game.playCard(idx, a.cardId, a.color);
           else game.drawCard(idx);
         } catch (err) {
@@ -58,6 +60,9 @@
           }
         }
         if (game.phase === 'hush') game.resolveHush(false);
+        if (game.phase === 'slap') game.resolveSlap(game.players.map(function () {
+          return OINK.RULES.SLAP_CHOICES[Math.floor(game.rng() * OINK.RULES.SLAP_CHOICES.length)];
+        }));
         turns++;
       }
 
@@ -73,8 +78,8 @@
       var st = game.getState();
       var total = st.discardCount + st.drawCount;
       for (var p = 0; p < st.players.length; p++) total += st.players[p].hand.length;
-      if (total !== 120) {
-        out.push('FAIL g' + g + ': card conservation broken (' + total + '/120)');
+      if (total !== 112) {
+        out.push('FAIL g' + g + ': card conservation broken (' + total + '/112)');
         failures++;
         break;
       }
@@ -87,29 +92,44 @@
       '<li>Games: ' + g + ' / ' + n + '</li>' +
       '<li>Avg turns: ' + (g ? (totalTurns / g).toFixed(1) : '-') + ' \u00B7 max ' + maxTurns + '</li>' +
       '<li>Wins A/B/C/D: ' + wins.join(' / ') + '</li>' +
-      '<li>Hushes: ' + hushCount + ' \u00B7 oink fails: ' + oinkFails + ' \u00B7 swaps: ' + swaps + ' \u00B7 reshuffles: ' + reshuffles + '</li>' +
+      '<li>Hushes: ' + hushCount + ' \u00B7 hoof slaps: ' + slapCount + ' \u00B7 transfers: ' + transfers + ' \u00B7 reshuffles: ' + reshuffles + '</li>' +
       '<li>Time: ' + ms + ' ms</li>' +
       '</ul>' +
-      (out.length ? '<pre>' + out.join('\n') + '</pre>' : '<p>All games terminated, all 120 cards conserved.</p>');
+      (out.length ? '<pre>' + out.join('\n') + '</pre>' : '<p>All games terminated, all 112 cards conserved.</p>');
     return { html: html, failures: failures, games: g };
   }
 
   function boot() {
-    // sound preference
-    var on = localStorage.getItem('oink.sound') !== 'off';
-    OINK.audio.setEnabled(on);
+    var splash = document.getElementById('boot-screen');
+    var started = performance.now();
+    try {
+      document.getElementById('crazygames-sdk').addEventListener('load', function () { OINK.sdk.init(); });
+      // sound preference
+      var on = localStorage.getItem('oink.sound') !== 'off';
+      OINK.audio.setEnabled(on);
 
-    OINK.ui.init();
-    OINK.sdk.init();
+      OINK.sdk.init();
+      OINK.sdk.loadingStart();
+      OINK.ui.init();
 
-    if (global.location.search.indexOf('selftest') >= 0) {
-      document.body.classList.add('selftest');
-      var res = runSelfTest(300);
-      var d = global.document.createElement('div');
-      d.id = 'selftest-report';
-      d.innerHTML = res.html;
-      global.document.body.appendChild(d);
-      console.log('[oink] self-test', res.failures ? 'FAILED' : 'PASSED', res);
+      if (global.location.search.indexOf('selftest') >= 0) {
+        document.body.classList.add('selftest');
+        var res = runSelfTest(300);
+        var d = global.document.createElement('div');
+        d.id = 'selftest-report';
+        d.innerHTML = res.html;
+        global.document.body.appendChild(d);
+        console.log('[oink] self-test', res.failures ? 'FAILED' : 'PASSED', res);
+      }
+      setTimeout(function () {
+        OINK.sdk.loadingStop();
+        splash.classList.add('leaving');
+        setTimeout(function () { splash.hidden = true; }, 350);
+      }, Math.max(0, 650 - (performance.now() - started)));
+    } catch (err) {
+      console.error('[oink] startup failed', err);
+      splash.querySelector('p').textContent = 'Could not load the game. Please refresh.';
+      splash.querySelector('.boot-track').hidden = true;
     }
   }
 

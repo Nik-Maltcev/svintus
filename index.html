@@ -4,13 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Oink! — Wild Pig Card Game</title>
-<meta name="description" content="Oink! is a fast, chaotic pig-themed shedding card game. Match colors and symbols, slap the OINK button, and don't touch anything when someone plays Shhh!">
+<meta name="description" content="Oink! is a fast, chaotic pig-themed shedding card game. Match colors and symbols, slap the OINK button, and don't touch anything when someone plays Hush Pig.">
 <link rel="stylesheet" href="css/style.css">
-<!-- CrazyGames SDK: safely absent in local dev (see js/sdk.js) -->
-<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<link rel="stylesheet" href="css/refresh.css">
+<script id="crazygames-sdk" async src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
 </head>
 <body>
 <div id="app">
+
+  <section id="boot-screen" role="status" aria-live="polite" aria-label="Loading Oink">
+    <div class="boot-card" aria-hidden="true">
+      <svg viewBox="0 0 120 120"><path d="M25 42 17 13 45 28M95 42l8-29-28 15" fill="#f9b4ba" stroke="#794755" stroke-width="4" stroke-linejoin="round"/><circle cx="60" cy="65" r="41" fill="#f9b4ba" stroke="#794755" stroke-width="4"/><path d="M39 58q7-5 14 0m14 0q7-5 14 0" fill="none" stroke="#603d50" stroke-width="4" stroke-linecap="round"/><ellipse cx="60" cy="78" rx="23" ry="16" fill="#ee8e9f" stroke="#794755" stroke-width="3"/><ellipse cx="51" cy="78" rx="4" ry="6" fill="#a55670"/><ellipse cx="69" cy="78" rx="4" ry="6" fill="#a55670"/></svg>
+    </div>
+    <h2>OINK!</h2>
+    <p>Setting the table…</p>
+    <div class="boot-track" aria-hidden="true"><span></span></div>
+  </section>
 
   <!-- ============ MENU ============ -->
   <section id="menu" class="screen">

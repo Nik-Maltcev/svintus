@@ -1,15 +1,21 @@
 # Oink! — Wild Pig Card Game
 
-A fast, chaotic pig-themed shedding card game (Uno-like) built as a pure
-HTML5/JS single-page app — designed for web portals like CrazyGames.
-Rules inspired by classic shedding games, with original theme, art and two
-signature mechanics built for digital play:
+A pig-themed shedding card game built as a pure HTML5/JS single-page app.
+Its 112-card deck and core rules follow the structure of classic Svintus,
+with original English names and art. The physical social actions have
+single-player digital versions:
 
-- **OINK!** — down to your last card? You have 3 seconds to smack the OINK
-  button, or you draw 2 penalty cards (the digital take on calling "Uno!").
-- **Shhh!** — a wild card that freezes the whole table for 4 seconds.
-  First one to touch the screen draws 2. The bots twitch and fake-move to
-  bait you.
+- **OINK!** — call before playing your penultimate card. A 3-second grace
+  window follows if you miss it; failing costs 3 cards.
+- **Hush Pig** — avoid clicking, tapping, or pressing a key for 4 seconds or
+  draw 2. This replaces the physical game's spoken-silence rule without
+  requesting microphone access.
+- **Hoof Slap** — choose Slap, Dodge, or Grab without a timer. Bots choose
+  secretly. Slap beats Grab, Grab beats Dodge, and Dodge beats Slap. Players
+  who chose the losing move draw 2; all matching or all three moves is a tie.
+- **Grab Pig** — forces 3 cards and a skipped turn, unless the victim plays
+  another Grab Pig and passes on a larger penalty.
+- **Intercept** — play an identical card out of turn to take initiative.
 
 ## Run locally
 
@@ -30,37 +36,52 @@ npx serve .            # or: python -m http.server 8080
 
 Open `http://127.0.0.1:8080/?selftest=1` — runs 300 bot-vs-bot games through
 the real engine in-page and reports termination, win spread and card
-conservation (all 120 cards must stay accounted for). Engine guarantees:
-games always terminate, average ~31 turns (2 players) to ~43 turns (4 players).
+conservation (all 112 cards must stay accounted for).
+Run `node tests/game-rules.js` for focused deck and action checks.
+
+For display checks, install the test dependency and browser once, then run:
+
+```bash
+npm install
+npx playwright install chromium
+npm run test:layout
+```
+
+The display test checks the loading screen, menu, table, help, card prompts,
+special-card overlays, and round result at eight phone, tablet, and desktop
+sizes. Set `LAYOUT_SCREENSHOTS=1` to save screenshots in `tests/artifacts/`.
 
 ## Structure
 
 ```
 index.html        markup, loads SDK + scripts
-css/style.css     all styling (responsive: desktop, mobile portrait, short screens)
-js/cards.js       deck model (120 cards), match rules
-js/game.js        engine: turn state machine, OINK/Shhh rules, event emitter
-js/bots.js        bot AI (heuristics: attack the leader, hoard wilds, swap smart)
+css/style.css     base styling and responsive layout
+css/refresh.css   illustrated card set and tabletop theme
+js/cards.js       deck model (112 cards), match rules
+js/game.js        engine: turn state machine, reactions, transfers, interception
+js/bots.js        bot AI (heuristics: attack the leader, hoard color choosers)
 js/audio.js       WebAudio-synthesized SFX (no audio assets)
 js/sdk.js         CrazyGames SDK wrapper (graceful no-op outside their iframe)
-js/ui.js          rendering, animations, input, overlays
+js/ui.js          rendering, original SVG pig illustrations, animations, input, overlays
 js/main.js        menu wiring, sound pref, self-test mode
 serve.ps1         tiny PowerShell static server for local testing
+tests/game-rules.js  focused checks for deck and special rules
 ```
 
 No external assets: all art is inline SVG/CSS, all sounds are WebAudio
 synthesis. The only external script is the CrazyGames SDK itself.
 
-## The deck (120 cards)
+## The deck (112 cards)
 
-- 4 colors × (0, 1–9 ×2) = 76 number cards
-- Per color ×2: **Snooze** (skip), **U-Turn** (reverse), **Mud Sling** (+2),
-  **Hand Swap** (trade hands with the next player) = 32 action cards
-- Wilds ×4 each: **Any Color**, **Stampede** (+4 + color), **Shhh!**
+- Red, orange, green, and blue × (0–7 ×2) = 64 number cards
+- Per color ×2: **Snore Pig** (skip), **Piggy Turn** (reverse), **Grab Pig** (+3),
+  **Hush Pig** (quiet challenge), **Hoof Slap** (secret-choice clash) = 40 action cards
+- **Color Hog** ×8 (choose the next color)
 
-Core rules: match by color / number / symbol; no match → draw 1 (may play it
-immediately); first to shed everything wins. Round scoring: numbers face
-value, actions 20, wilds 50.
+Core rules: each player starts with 8 cards; match by color, number, or
+symbol; no match → draw 1 (may play it immediately). The first to shed
+everything wins. A round winner scores one point for each card left in the
+other players' hands.
 
 ## CrazyGames submission checklist
 
@@ -86,5 +107,5 @@ Before uploading (developer portal → submit HTML5 game):
 - Difficulty presets for bots (Sloppy / Average / Hog Wild)
 - Online multiplayer (CrazyGames multiplayer) — the solo-vs-bots mode already
   satisfies their single-player requirement
-- More chaotic cards: stacked +2s, "7-0" rule, jump-ins
+- More bot personalities and difficulty presets
 - Cosmetic pig skins as rewarded-ad unlocks

@@ -31,13 +31,16 @@
   function decide(game, idx) {
     var st = game.getState();
     var me = st.players[idx];
-    var playable = me.hand.filter(function (c) { return C.canPlay(c, st.discardTop, st.activeColor); });
+    if (st.pendingDraw) {
+      var transfer = me.hand.find(function (c) { return c.kind === 'action' && c.effect === 'draw3'; });
+      return transfer ? { type: 'play', cardId: transfer.id } : { type: 'draw' };
+    }
+    var playable = me.hand.filter(function (c) { return game.canPlayCard(c); });
     if (!playable.length) return { type: 'draw' };
 
     var n = st.players.length;
     var nextIdx = peekNext(st.turn, st.direction, n);
     var nextCount = st.players[nextIdx].hand.length;
-    var myCount = me.hand.length;
     var threat = nextCount <= 2;
 
     var colorCount = countColors(me.hand);
@@ -55,19 +58,14 @@
       if (c.kind === 'number') {
         s += 10 + c.value + (c.color === dominant ? 3 : 0);
       } else if (c.kind === 'action') {
-        if (c.effect === 'draw2') s += threat ? 40 : 14;
+        if (c.effect === 'draw3') s += threat ? 40 : 18;
         else if (c.effect === 'skip') s += threat ? 38 : 13;
-        else if (c.effect === 'reverse') s += (n === 2 ? (threat ? 38 : 20) : 12);
-        else if (c.effect === 'swap') {
-          if (myCount >= 5 && nextCount <= myCount - 2) s += 30;
-          else if (threat && nextCount < myCount) s += 26;
-          else s -= 8;
-        }
+        else if (c.effect === 'reverse') s += 12;
+        else if (c.effect === 'slap') s += 16;
+        else if (c.effect === 'hush') s += 13;
         if (c.color === dominant) s += 3;
       } else { // wilds
-        if (c.effect === 'wild4') s += nonWild.length ? -30 : (threat ? 36 : 8);
-        else if (c.effect === 'wild') s += nonWild.length ? -25 : 6;
-        else s += 11; // shhh — harmless fun for a bot
+        s += nonWild.length ? -25 : 6;
       }
       if (s > bestScore) { bestScore = s; best = c; }
     }

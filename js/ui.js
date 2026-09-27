@@ -23,11 +23,10 @@
   var ICONS = {
     skip: '<svg class="ic" viewBox="0 0 40 40"><text x="5" y="17" font-size="13" font-weight="900" fill="currentColor" font-family="inherit">z</text><text x="16" y="27" font-size="18" font-weight="900" fill="currentColor" font-family="inherit">z</text><text x="29" y="15" font-size="10" font-weight="900" fill="currentColor" font-family="inherit">z</text></svg>',
     reverse: '<svg class="ic" viewBox="0 0 40 40"><path d="M8 14 H28 M24 8 L30 14 L24 20" stroke="currentColor" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 27 H12 M16 21 L10 27 L16 33" stroke="currentColor" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    draw2: '<svg class="ic" viewBox="0 0 40 40"><g fill="currentColor"><circle cx="20" cy="23" r="10"/><circle cx="10" cy="16" r="3.4"/><circle cx="30" cy="14" r="4"/><circle cx="32" cy="26" r="2.6"/><circle cx="8" cy="26" r="2.2"/></g><text x="20" y="27" text-anchor="middle" font-size="11" font-weight="900" fill="#fff" font-family="inherit">+2</text></svg>',
-    swap: '<svg class="ic" viewBox="0 0 40 40"><path d="M8 15 H30 M26 9 L32 15 L26 21" stroke="currentColor" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 26 H10 M14 20 L8 26 L14 32" stroke="currentColor" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    wild: '<svg class="ic" viewBox="0 0 40 40"><path d="M20 20 L20 5 A15 15 0 0 1 35 20 Z" fill="#e74c3c"/><path d="M20 20 L35 20 A15 15 0 0 1 20 35 Z" fill="#4a90d9"/><path d="M20 20 L20 35 A15 15 0 0 1 5 20 Z" fill="#f0b429"/><path d="M20 20 L5 20 A15 15 0 0 1 20 5 Z" fill="#3aa76d"/></svg>',
-    wild4: '<svg class="ic" viewBox="0 0 40 40"><path d="M20 20 L20 5 A15 15 0 0 1 35 20 Z" fill="#e74c3c"/><path d="M20 20 L35 20 A15 15 0 0 1 20 35 Z" fill="#4a90d9"/><path d="M20 20 L20 35 A15 15 0 0 1 5 20 Z" fill="#f0b429"/><path d="M20 20 L5 20 A15 15 0 0 1 20 5 Z" fill="#3aa76d"/><circle cx="20" cy="20" r="8.5" fill="#fff"/><text x="20" y="24" text-anchor="middle" font-size="10" font-weight="900" fill="#444" font-family="inherit">+4</text></svg>',
-    shhh: '<svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="21" r="13" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="15" cy="17" r="1.9" fill="currentColor"/><circle cx="25" cy="17" r="1.9" fill="currentColor"/><rect x="18" y="21" width="4" height="13" rx="2" fill="currentColor"/></svg>'
+    draw3: '<svg class="ic" viewBox="0 0 40 40"><g fill="currentColor"><circle cx="20" cy="23" r="10"/><circle cx="10" cy="16" r="3.4"/><circle cx="30" cy="14" r="4"/><circle cx="32" cy="26" r="2.6"/><circle cx="8" cy="26" r="2.2"/></g><text x="20" y="27" text-anchor="middle" font-size="11" font-weight="900" fill="#fff" font-family="inherit">+3</text></svg>',
+    hush: '<svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="21" r="13" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="15" cy="17" r="1.9" fill="currentColor"/><circle cx="25" cy="17" r="1.9" fill="currentColor"/><rect x="18" y="21" width="4" height="13" rx="2" fill="currentColor"/></svg>',
+    slap: '<svg class="ic" viewBox="0 0 40 40"><path d="M11 31V15q0-4 4-4t4 4V8q0-4 4-4t4 4v8q0-4 4-4t4 4v15z" fill="currentColor"/><path d="M11 23l-5-4q-4-2-4 2l9 12" fill="currentColor"/></svg>',
+    wild: '<svg class="ic" viewBox="0 0 40 40"><path d="M20 20 L20 5 A15 15 0 0 1 35 20 Z" fill="#e74c3c"/><path d="M20 20 L35 20 A15 15 0 0 1 20 35 Z" fill="#4a90d9"/><path d="M20 20 L20 35 A15 15 0 0 1 5 20 Z" fill="#eaa347"/><path d="M20 20 L5 20 A15 15 0 0 1 20 5 Z" fill="#3aa76d"/></svg>',
   };
 
   var SNOUT = '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="52" rx="34" ry="26" fill="currentColor"/><ellipse cx="37" cy="50" rx="6.5" ry="9" fill="rgba(0,0,0,.35)"/><ellipse cx="63" cy="50" rx="6.5" ry="9" fill="rgba(0,0,0,.35)"/></svg>';
@@ -64,7 +63,7 @@
 
   /* ---------------- helpers ---------------- */
 
-  var COLOR_ORDER = { red: 0, yellow: 1, green: 2, blue: 3 };
+  var COLOR_ORDER = { red: 0, orange: 1, green: 2, blue: 3 };
   function sortHand(hand) {
     return hand.slice().sort(function (a, b) {
       var ca = a.color ? COLOR_ORDER[a.color] : 9;
@@ -76,24 +75,46 @@
     });
   }
 
+  // Original character art drawn as SVG so every card stays crisp at any size.
+  function pigScene(effect) {
+    var props = {
+      skip: '<path d="M16 85h88v8H16z" fill="#8c493e"/><path d="M28 93v18m64-18v18" stroke="#70362f" stroke-width="6"/><text x="83" y="35" fill="#fff" font-size="20" font-weight="900" transform="rotate(12 83 35)">Z z</text>',
+      reverse: '<path d="M12 60c0-27 19-43 42-44" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/><path d="M48 9l13 7-12 9" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M108 64c-2 25-19 40-43 42" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/><path d="M71 113l-13-7 12-9" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>',
+      draw3: '<path d="M20 93l-9-12 11-5-6-14 16 3 8-13 7 16 15 1-10 13 9 12-17-2-7 12-8-12z" fill="#74412e"/><circle cx="30" cy="68" r="5" fill="#74412e"/><circle cx="57" cy="58" r="4" fill="#74412e"/><text x="75" y="109" fill="#fff" font-size="25" font-weight="900">+3</text>',
+      slap: '<path d="M12 103h96v9H12z" fill="#784239"/><path d="M87 27v42M77 36v34M97 40v31M69 52v23" fill="none" stroke="#f7b2b9" stroke-width="10" stroke-linecap="round"/><path d="M68 71q18-15 39-3l-7 22q-18 13-30-3z" fill="#f7b2b9" stroke="#794755" stroke-width="2"/><path d="M13 37l-6-8m20 2-1-9m9 17 8-5" stroke="#fff" stroke-width="5" stroke-linecap="round"/>',
+      wild: '<path d="M11 88Q19 22 64 19Q100 18 111 80" fill="none" stroke="#e85c56" stroke-width="10"/><path d="M16 88Q24 31 64 27Q94 27 106 79" fill="none" stroke="#f3c74f" stroke-width="9"/><path d="M21 89Q30 39 64 36Q89 35 101 80" fill="none" stroke="#6dbd77" stroke-width="8"/><path d="M27 89Q37 48 64 44Q84 44 96 81" fill="none" stroke="#5c9bd2" stroke-width="7"/>',
+      hush: '<path d="M76 60v-26c0-7 11-7 11 0v30" fill="#f5a8ad" stroke="#733e4c" stroke-width="2"/><circle cx="91" cy="30" r="3" fill="#fff"/><text x="83" y="105" text-anchor="middle" fill="#fff" font-size="17" font-weight="900">SHH!</text>'
+    };
+    return '<svg class="pig-scene" viewBox="0 0 120 120" aria-hidden="true">' +
+      '<circle cx="60" cy="60" r="54" fill="rgba(255,255,255,.13)"/>' +
+      '<path d="M23 97Q17 54 43 44L74 43Q102 58 98 99Z" fill="#603d57" stroke="#513348" stroke-width="2"/>' +
+      '<path d="M29 49L23 19Q22 13 29 17L47 31M91 49l6-30q1-6-6-2L73 31" fill="#f9b4ba" stroke="#794755" stroke-width="3" stroke-linejoin="round"/>' +
+      '<ellipse cx="60" cy="60" rx="37" ry="34" fill="#f8afb7" stroke="#794755" stroke-width="2.6"/>' +
+      '<path d="M36 55q7-5 15 0m18 0q8-5 15 0" fill="none" stroke="#603d50" stroke-width="3" stroke-linecap="round"/>' +
+      '<ellipse cx="60" cy="76" rx="21" ry="14" fill="#ee8e9f" stroke="#794755" stroke-width="2"/>' +
+      '<ellipse cx="51" cy="76" rx="3.8" ry="6" fill="#a55670"/><ellipse cx="69" cy="76" rx="3.8" ry="6" fill="#a55670"/>' +
+      '<path d="M36 96q7 0 14 8m34-8q-7 0-14 8" fill="none" stroke="#f8afb7" stroke-width="9" stroke-linecap="round"/>' +
+      (props[effect] || '') + '</svg>';
+  }
+
   function cardEl(card, back) {
     var d = el('div', 'card');
-    if (back || !card) { d.classList.add('back'); d.innerHTML = '<div class="back-snout">' + SNOUT + '</div><div class="back-word">OINK!</div>'; return d; }
-    d.classList.add('face', card.color || 'wild');
-    var idx = card.kind === 'number' ? String(card.value)
-      : card.kind === 'action' ? ICONS[card.effect]
-      : '';
-    var center;
-    if (card.kind === 'number') {
-      center = '<div class="oval"><span class="big">' + card.value + '</span></div>';
-    } else if (card.kind === 'action') {
-      center = '<div class="oval oval-icon">' + ICONS[card.effect] + '<span class="card-name">' + C.EFFECTS[card.effect].name + '</span></div>';
-    } else if (card.effect === 'shhh') {
-      center = '<div class="oval oval-icon">' + ICONS.shhh + '<span class="card-name">Shhh!</span></div>';
-    } else {
-      center = '<div class="oval oval-icon">' + ICONS[card.effect] + '<span class="card-name">' + C.WILDS[card.effect].name + '</span></div>';
+    if (back || !card) {
+      d.classList.add('back');
+      d.innerHTML = '<div class="back-pattern"></div><div class="back-badge">' + SNOUT + '<strong>OINK!</strong></div>';
+      return d;
     }
-    d.innerHTML = '<div class="idx tl">' + idx + '</div>' + center + '<div class="idx br">' + idx + '</div>';
+    d.classList.add('face', card.color || 'wild');
+    d.classList.add(card.kind === 'number' ? 'number-card' : 'action-card');
+    var idx = card.kind === 'number' ? String(card.value) : ICONS[card.effect];
+    var center, name = C.label(card);
+    if (card.kind === 'number') {
+      center = '<div class="number-medallion"><span class="number-mark">' + SNOUT + '</span><span class="big">' + card.value + '</span></div>';
+    } else {
+      center = '<div class="scene-wrap">' + pigScene(card.effect) + '</div><div class="card-ribbon">' + name + '</div>';
+    }
+    d.setAttribute('aria-label', (card.color ? card.color + ' ' : '') + name);
+    d.innerHTML = '<div class="card-inner"><span class="corner top">' + idx + '</span>' + center + '<span class="corner bottom">' + idx + '</span></div>';
     return d;
   }
 
@@ -135,7 +156,7 @@
     var self = this;
 
     // static SVG art
-    $('#deck .back-snout').innerHTML = SNOUT;
+    $('#deck .card').replaceWith(cardEl(null, true));
     $('#logo-pig').innerHTML = pigAvatar('#f9a8c5', 'crown');
     $('#you-avatar').innerHTML = pigAvatar(HUMAN_ACCENT, 'crown');
 
@@ -294,16 +315,20 @@
       case 'turn': {
         if (!this._game || this._game.phase !== 'playing') break;
         var st = this._game.getState();
+        if (st.turn !== e.player) break; // an interception can replace a queued turn
         this._updateSeats();
         if (st.players[e.player].isBot) {
           this._humanTurn = false;
           this._renderHand();
+          if (!this._game.oink || this._game.oink.player !== 0) this._hideOinkButton();
           this._scheduleBot(e.player, 750 + Math.random() * 750);
         } else {
           this._humanTurn = true;
           this._renderHand();
+          if (st.players[0].hand.length === 2 && !this._game.oink) this._showOinkButton(0);
+          else if (!this._game.oink || this._game.oink.player !== 0) this._hideOinkButton();
           audio.play('turn');
-          this._banner('Your turn!');
+          this._banner(st.pendingDraw ? 'Pass on +' + st.pendingDraw + ' or draw!' : 'Your turn!');
         }
         break;
       }
@@ -324,14 +349,22 @@
           flyClone(fromRect, toRect, face, 320);
           await sleep(260);
         }
-        if (e.card.kind === 'action' && (e.card.effect === 'draw2' || e.card.effect === 'wild4')) {
-          this._bubble(e.player, e.card.effect === 'wild4' ? 'Stampede! +4' : 'Mud Sling! +2');
-        }
+        if (e.card.effect === 'draw3') this._bubble(e.player, 'Grab Pig! +3');
+        if (this._game && this._game.getState().discardTop.id === e.card.id) this._scheduleBotIntercept(e.player);
         break;
       }
 
+      case 'intercept':
+        this._toast(e.player === 0 ? 'Intercept! Your turn now.' : this._game.players[e.player].name + ' intercepted!', 'good');
+        break;
+
+      case 'attack':
+        this._toast('Grab Pig: +' + e.count + ' to pass on or draw', 'bad');
+        break;
+
       case 'draw': {
         audio.play('draw');
+        if (e.player === 0 && e.reason === 'voluntary') this._hideOinkButton();
         var deckRect = $('#deck').getBoundingClientRect();
         var target = e.player === 0 ? $('#hand') : this._seatEl(e.player);
         if (deckRect && target) flyClone(deckRect, target.getBoundingClientRect(), cardEl(null, true), 300);
@@ -340,13 +373,14 @@
         this._updateSeats();
         this._updateCenter();
         if (e.reason === 'attack' && e.player === 0) this._toast('You draw ' + e.count + '!', 'bad');
-        if (e.reason === 'oink' && e.player === 0) this._toast('Forgot to OINK! +2', 'bad');
-        if (e.reason === 'hush') this._toast('You spoke! +2 cards', 'bad');
+        if (e.reason === 'oink' && e.player === 0) this._toast('Forgot to OINK! +3', 'bad');
+        if (e.reason === 'hush') this._toast(e.player === 0 ? 'You broke the hush! +2 cards' : this._game.players[e.player].name + ' broke the hush! +2');
+        if (e.reason === 'slap') this._toast(e.player === 0 ? 'Your move lost! +2 cards' : this._game.players[e.player].name + ' lost the clash! +2');
         break;
       }
 
       case 'skip':
-        this._bubble(e.player, 'Snoozed!');
+        this._bubble(e.player, 'Snore Pig!');
         audio.play('click');
         await sleep(450);
         break;
@@ -360,20 +394,18 @@
         await sleep(300);
         break;
 
-      case 'swap':
-        audio.play('swap');
-        this._bubble(e.a, 'Swap!');
-        this._bubble(e.b, 'Swap!');
-        await sleep(350);
-        this._renderHand();
-        this._updateSeats();
-        if (e.a === 0 || e.b === 0) this._toast('Hands swapped!');
-        await sleep(250);
-        break;
-
       case 'hush':
         audio.play('shush');
         await this._showHush(e.duration);
+        break;
+
+      case 'slap':
+        audio.play('click');
+        await this._showSlap();
+        break;
+
+      case 'slapEnd':
+        if (e.losers.indexOf(0) >= 0) audio.play('penalty');
         break;
 
       case 'hushEnd':
@@ -432,7 +464,7 @@
 
       case 'oinkFail':
         this._hideOinkButton();
-        if (e.player === 0) { audio.play('penalty'); this._toast('You forgot to OINK! +2 cards', 'bad'); }
+        if (e.player === 0) { audio.play('penalty'); this._toast('You forgot to OINK! +3 cards', 'bad'); }
         break;
 
       case 'win':
@@ -451,38 +483,63 @@
   OinkUI.prototype._scheduleBot = function (idx, delay) {
     var self = this, token = this._token;
     setTimeout(function () {
-      if (token !== self._token || !self._game || self._game.phase !== 'playing') return;
+      if (token !== self._token || !self._game || self._game.phase !== 'playing' || self._game.turn !== idx) return;
       var a = OINK.bots.decide(self._game, idx);
       try {
+        if (a.type === 'play' && self._game.players[idx].hand.length === 2) self._game.callOink(idx);
         if (a.type === 'play') self._game.playCard(idx, a.cardId, a.color);
         else self._game.drawCard(idx);
       } catch (err) { console.error('[oink] bot error', err); }
     }, delay);
   };
 
+  OinkUI.prototype._scheduleBotIntercept = function (actor) {
+    var self = this, token = this._token;
+    if (!this._game || !this._game.interceptOpen) return;
+    for (var idx = 1; idx < this._game.players.length; idx++) {
+      if (idx === actor || Math.random() > .42) continue;
+      (function (seatIdx) {
+        setTimeout(function () {
+          if (token !== self._token || !self._game || !self._game.interceptOpen) return;
+          var card = self._game.players[seatIdx].hand.find(function (c) { return self._game.canIntercept(seatIdx, c); });
+          if (!card) return;
+          var color = card.kind === 'wild' ? OINK.bots.pickColor({}, self._game.rng) : undefined;
+          try { self._game.interceptCard(seatIdx, card.id, color); } catch (err) { /* another player was faster */ }
+        }, 350 + Math.random() * 500);
+      })(idx);
+    }
+  };
+
   /* ---------- input ---------- */
 
   OinkUI.prototype._tryPlay = function (cardId, cardDiv) {
-    if (!this._game || !this._humanTurn || this._game.drawn) return;
+    if (!this._game || this._game.drawn) return;
     var st = this._game.getState();
     var card = null;
     for (var i = 0; i < st.players[0].hand.length; i++) {
       if (st.players[0].hand[i].id === cardId) { card = st.players[0].hand[i]; break; }
     }
     if (!card) return;
-    if (!C.canPlay(card, st.discardTop, st.activeColor)) {
+    var intercept = !this._humanTurn && this._game.canIntercept(0, card);
+    if (!intercept && (!this._humanTurn || this._game.turn !== 0 || !this._game.canPlayCard(card))) {
       cardDiv.classList.add('shake');
       setTimeout(function () { cardDiv.classList.remove('shake'); }, 400);
       return;
     }
     var self = this;
+    var play = function (color) {
+      try {
+        if (intercept) self._game.interceptCard(0, cardId, color);
+        else self._game.playCard(0, cardId, color);
+      } catch (e) { console.error(e); }
+    };
     if (card.kind === 'wild') {
       this._showColorPicker().then(function (color) {
         if (!color) return;
-        try { self._game.playCard(0, cardId, color); } catch (e) { console.error(e); }
+        play(color);
       });
     } else {
-      try { this._game.playCard(0, cardId); } catch (e) { console.error(e); }
+      play(undefined);
     }
   };
 
@@ -499,7 +556,7 @@
         '<div class="avatar">' + pigAvatar(bots[i].accent, bots[i].acc) + '</div>' +
         '<div class="seat-name">' + bots[i].name + '</div>' +
         '<div class="fan"></div>' +
-        '<div class="count">7</div>';
+        '<div class="count">8</div>';
       wrap.appendChild(seat);
     }
   };
@@ -517,7 +574,7 @@
       var n = st.players[i].hand.length;
       seat.querySelector('.count').textContent = n;
       var fan = seat.querySelector('.fan');
-      var shown = Math.min(n, 7);
+      var shown = Math.min(n, 8);
       while (fan.children.length < shown) fan.appendChild(cardEl(null, true));
       while (fan.children.length > shown) fan.removeChild(fan.lastChild);
       seat.classList.toggle('active', st.turn === i && st.phase === 'playing');
@@ -556,13 +613,13 @@
     var sorted = sortHand(st.players[0].hand);
     var playableIds = {};
     for (var i = 0; i < sorted.length; i++) {
-      if (C.canPlay(sorted[i], st.discardTop, st.activeColor)) playableIds[sorted[i].id] = true;
+      if ((this._humanTurn && st.turn === 0 && this._game.canPlayCard(sorted[i])) || this._game.canIntercept(0, sorted[i])) playableIds[sorted[i].id] = true;
     }
     hand.classList.toggle('many', sorted.length > 8);
     for (var j = 0; j < sorted.length; j++) {
       var d = cardEl(sorted[j]);
       d.dataset.id = sorted[j].id;
-      if (this._humanTurn && playableIds[sorted[j].id]) d.classList.add('playable');
+      if (playableIds[sorted[j].id]) d.classList.add('playable');
       if (st.drawn === sorted[j].id) d.classList.add('picked');
       hand.appendChild(d);
     }
@@ -625,38 +682,44 @@
   };
 
   OinkUI.prototype._showHush = function (duration) {
-    var self = this;
+    var self = this, token = this._token;
     return new Promise(function (resolve) {
       var root = self._overlay();
       var box = el('div', 'hush');
       box.innerHTML =
         '<div class="hush-inner">' +
-        '<div class="hush-icon">' + ICONS.shhh + '</div>' +
+        '<div class="hush-icon">' + ICONS.hush + '</div>' +
         '<h2>SHHH&hellip;</h2>' +
-        '<p>Don\u2019t touch anything!</p>' +
+        '<p>Don\u2019t click, tap, or press a key for 4 seconds!</p>' +
         '<div class="ring"><div class="ring-fill"></div></div>' +
         '</div>';
       root.appendChild(box);
 
       var done = false;
-      function finish(failed) {
+      function finish(offender) {
         if (done) return;
         done = true;
         clearInterval(iv);
+        document.removeEventListener('keydown', onKey, true);
         box.classList.add('gone');
-        setTimeout(function () { self._closeOverlay(); }, 200);
-        try { self._game.resolveHush(failed); } catch (e) { console.error(e); }
+        setTimeout(function () { if (token === self._token && root.contains(box)) self._closeOverlay(); }, 200);
+        try { if (token === self._token && self._game) self._game.resolveHush(offender); } catch (e) { console.error(e); }
         resolve();
       }
+      function onKey(ev) { ev.preventDefault(); finish(0); }
       var iv = setInterval(function () {
         var pct = Math.max(0, 100 - ((Date.now() - t0) / duration) * 100);
         box.querySelector('.ring-fill').style.height = pct + '%';
-        if (Date.now() - t0 >= duration) finish(false);
+        if (Date.now() - t0 >= duration) {
+          var botOops = self._game && self._game.rng() < .28;
+          finish(botOops ? 1 + Math.floor(self._game.rng() * (self._game.players.length - 1)) : false);
+        }
       }, 50);
       var t0 = Date.now();
-      box.addEventListener('pointerdown', function () { finish(true); });
+      box.addEventListener('pointerdown', function () { finish(0); });
+      document.addEventListener('keydown', onKey, true);
 
-      // bots lean in and twitch — pure theater, they never fail
+      // Bots lean in and twitch; one may also fumble the quiet challenge.
       for (var i = 1; i <= BOT_PROFILES.length; i++) {
         var seat = self._seatEl(i);
         if (seat) setTimeout(function (s) { return function () { s.classList.add('twitch'); }; }(seat), 300 + i * 250);
@@ -670,13 +733,59 @@
     });
   };
 
+  OinkUI.prototype._showSlap = function () {
+    var self = this, token = this._token;
+    return new Promise(function (resolve) {
+      var root = self._overlay();
+      var box = el('div', 'slap-challenge');
+      box.innerHTML = '<div class="slap-inner"><div class="slap-art">' + ICONS.slap + '</div>' +
+        '<h2>HOOF SLAP!</h2>' +
+        '<p>Pick a move. No timer — the bots choose in secret.</p>' +
+        '<div class="slap-rules">Slap beats Grab <span>•</span> Grab beats Dodge <span>•</span> Dodge beats Slap</div>' +
+        '<div class="slap-choices">' +
+          '<button type="button" data-choice="slap">✋<span>SLAP</span></button>' +
+          '<button type="button" data-choice="dodge">↪<span>DODGE</span></button>' +
+          '<button type="button" data-choice="grab">✊<span>GRAB</span></button>' +
+        '</div>' +
+        '<p class="slap-note">Losing moves take 2 cards. All same or all three? No penalty.</p>' +
+        '<div class="slap-reveal" aria-live="polite"></div></div>';
+      root.appendChild(box);
+      box.querySelector('[data-choice="slap"]').focus();
+      var botChoices = [];
+      for (var i = 1; i < self._game.players.length; i++) {
+        botChoices.push(RULES.SLAP_CHOICES[Math.floor(self._game.rng() * RULES.SLAP_CHOICES.length)]);
+      }
+      var done = false;
+      box.querySelector('.slap-choices').addEventListener('click', function (ev) {
+        var button = ev.target.closest('button[data-choice]');
+        if (!button || done || token !== self._token || !self._game) return;
+        done = true;
+        var choices = [button.dataset.choice].concat(botChoices);
+        var result;
+        try { result = self._game.resolveSlap(choices); }
+        catch (e) { console.error(e); self._closeOverlay(); resolve(); return; }
+        var reveal = box.querySelector('.slap-reveal');
+        reveal.innerHTML = choices.map(function (choice, idx) {
+          var name = idx === 0 ? 'You' : self._game.players[idx].name;
+          return '<div class="slap-result' + (result.losers.indexOf(idx) >= 0 ? ' lost' : '') + '"><b>' + name + '</b><span>' + choice.toUpperCase() + '</span></div>';
+        }).join('') + '<strong>' + (result.losers.length ? 'Losing move: +2 cards' : 'Tie — no penalty!') + '</strong>';
+        box.classList.add('revealed');
+        setTimeout(function () {
+          if (token === self._token) self._closeOverlay();
+          resolve();
+        }, 1800);
+      });
+    });
+  };
+
   OinkUI.prototype._showOinkButton = function (duration) {
     var self = this;
     var btn = $('#btn-oink');
     btn.hidden = false;
     btn.classList.add('pulse');
-    var t0 = Date.now();
     clearInterval(this._oinkTimer);
+    if (!duration) { btn.style.setProperty('--p', '100'); return; }
+    var t0 = Date.now();
     this._oinkTimer = setInterval(function () {
       var left = duration - (Date.now() - t0);
       if (left <= 0) {
@@ -746,7 +855,7 @@
         '<td>' + (st.players[i].isBot ? pigAvatar(BOT_PROFILES[i - 1].accent, BOT_PROFILES[i - 1].acc) : pigAvatar(HUMAN_ACCENT, 'crown')) + '</td>' +
         '<td>' + st.players[i].name + '</td>' +
         '<td>' + e.hands[i] + ' cards</td>' +
-        '<td>' + e.points[i] + ' pts</td></tr>';
+        '<td>' + (i === e.winner ? '+' + e.roundScore + ' pts' : '') + '</td></tr>';
     }
 
     var box = el('div', 'modal round-end' + (won ? ' you-win' : ''));
@@ -790,18 +899,17 @@
     var root = this._overlay();
     var box = el('div', 'modal howto');
     var glossary =
-      ['skip', 'reverse', 'draw2', 'swap', 'wild', 'wild4', 'shhh'].map(function (k) {
+      ['skip', 'reverse', 'draw3', 'hush', 'slap', 'wild'].map(function (k) {
         var desc = {
           skip: 'Next player loses a turn',
           reverse: 'Flips the direction of play',
-          draw2: 'Next player draws 2 and loses a turn',
-          swap: 'Trade hands with the next player',
-          wild: 'Play anytime \u00B7 pick the color',
-          wild4: 'Pick the color \u00B7 next player draws 4',
-          shhh: 'Everyone freezes \u2014 first to touch draws 2!'
+          draw3: 'Next player takes 3 or passes the growing penalty on',
+          hush: 'No clicks, taps, or keys for 4 seconds or take 2',
+          slap: 'Secretly choose Slap, Dodge or Grab; losing moves take 2 cards',
+          wild: 'Play anytime and choose the next color'
         }[k];
-        var name = k === 'wild' ? C.WILDS.wild.name : k === 'wild4' ? C.WILDS.wild4.name : k === 'shhh' ? C.WILDS.shhh.name : C.EFFECTS[k].name;
-        var sample = k === 'wild' || k === 'wild4' || k === 'shhh'
+        var name = k === 'wild' ? C.WILDS.wild.name : C.EFFECTS[k].name;
+        var sample = k === 'wild'
           ? cardEl({ id: 'x', kind: 'wild', color: null, effect: k })
           : cardEl({ id: 'x', kind: 'action', color: 'red', effect: k });
         return '<div class="gloss">' + sample.outerHTML + '<div class="gloss-txt"><b>' + name + '</b><span>' + desc + '</span></div></div>';
@@ -810,10 +918,11 @@
     box.innerHTML =
       '<h2>How to play</h2>' +
       '<ul class="rules-list">' +
-      '<li>Dump all your cards first to win.</li>' +
+      '<li>Start with 8 cards. Dump them all first to win.</li>' +
       '<li>On your turn, match the top card by <b>color</b>, <b>number</b> or <b>symbol</b>.</li>' +
-      '<li>No match? Tap the deck to draw one card \u2014 if it plays, you may play it right away.</li>' +
-      '<li>Down to your last card? Smack the <b>OINK!</b> button within 3 seconds or draw 2.</li>' +
+      '<li>No match? Click or tap the deck to draw one card \u2014 if it plays, you may play it right away.</li>' +
+      '<li>Two cards left? Call <b>OINK!</b> before playing one. Miss it and draw 3.</li>' +
+      '<li>Have an identical card? Click or tap it out of turn to intercept.</li>' +
       '</ul>' +
       '<div class="glossary">' + glossary + '</div>';
     var close = el('button', 'btn primary big', 'Got it!');
